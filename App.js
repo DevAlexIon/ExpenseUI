@@ -3,6 +3,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SwiperComponent from './SwiperComponent';
 import Signup from './Signup';
+import Login from './Login';
+import ForgotPassword from './ForgotPassword';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +20,16 @@ const App = () => (
         name="Signup"
         options={{headerShown: false}}
         component={Signup}
+      />
+      <Stack.Screen
+        name="Login"
+        options={{headerShown: false}}
+        component={Login}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        options={{headerShown: false}}
+        component={ForgotPassword}
       />
     </Stack.Navigator>
   </NavigationContainer>

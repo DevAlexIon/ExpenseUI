@@ -79,7 +79,11 @@ const Signup: React.FC<SignupProps> = ({navigation}) => {
           </TouchableOpacity>
           <Text style={styles.lastText}>
             Already have an account?{' '}
-            <Text style={styles.loginRedirect}>Login</Text>
+            <Text
+              style={styles.loginRedirect}
+              onPress={() => navigation.navigate('Login')}>
+              Login
+            </Text>
           </Text>
         </View>
       </View>

@@ -33,7 +33,7 @@ const SwiperComponent = ({navigation}) => (
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => console.log('Sign up pressed')}>
+            onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -52,7 +52,7 @@ const SwiperComponent = ({navigation}) => (
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => console.log('Sign up pressed')}>
+            onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -71,7 +71,7 @@ const SwiperComponent = ({navigation}) => (
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => console.log('Sign up pressed')}>
+            onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
         </View>
