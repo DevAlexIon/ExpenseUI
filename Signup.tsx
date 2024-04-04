@@ -6,6 +6,9 @@ import {TextInput} from 'react-native-gesture-handler';
 import Eye from './svg/eye';
 import CheckBox from '@react-native-community/checkbox';
 import GoogleIcon from './svg/googleIcon';
+import {Formik} from 'formik';
+import {signUpSchema} from './validationSchema';
+import Toast from 'react-native-toast-message';
 
 interface SignupProps {
   navigation: NavigationProp<ParamListBase>;
@@ -13,81 +16,162 @@ interface SignupProps {
 
 const Signup: React.FC<SignupProps> = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const successToast = (message: string) => {
+    Toast.show({
+      type: 'success',
+      text1: message,
+      text1Style: {fontSize: 16, fontWeight: 'bold', color: '#464A4D'},
+    });
+  };
+
+  const errorToast = (message: string) => {
+    Toast.show({
+      type: 'error',
+      text1: message,
+      text1Style: {fontSize: 16, fontWeight: 'bold', color: '#464A4D'},
+    });
+  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <LeftArrow />
-        </TouchableOpacity>
-        <Text style={styles.title}>Sign Up</Text>
-      </View>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          placeholderTextColor={'#91919F'}
-          autoCapitalize="words"
-          autoCorrect={false}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          placeholderTextColor={'#91919F'}
-          autoCapitalize="none"
-        />
-        <View style={styles.inputPassword}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor={'#91919F'}
-            secureTextEntry={true}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          <View style={styles.eyeIconWrapper}>
-            <Eye />
+    <Formik
+      initialValues={{username: '', email: '', password: ''}}
+      validationSchema={signUpSchema}
+      onSubmit={async values => {
+        try {
+          const response = await fetch(
+            'http://10.1.3.100/expense-tracker/register',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(values),
+            },
+          );
+
+          const responseData = await response.json();
+          if (responseData.success) {
+            successToast(responseData.message);
+          } else {
+            errorToast(responseData.message);
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+        }
+      }}>
+      {formikProps => (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+              <LeftArrow />
+            </TouchableOpacity>
+            <Text style={styles.title}>Sign Up</Text>
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={[
+                styles.input,
+                formikProps.errors.username && formikProps.touched.username
+                  ? styles.inputErrorStyle
+                  : null,
+              ]}
+              placeholder="Name"
+              placeholderTextColor={'#91919F'}
+              autoCapitalize="words"
+              autoCorrect={false}
+              onChangeText={formikProps.handleChange('username')}
+              onBlur={formikProps.handleBlur('username')}
+              value={formikProps.values.username}
+            />
+            {formikProps.errors.username && formikProps.touched.username && (
+              <Text style={styles.errorText}>
+                {formikProps.errors.username}
+              </Text>
+            )}
+            <TextInput
+              style={[
+                styles.input,
+                formikProps.errors.email && formikProps.touched.email
+                  ? styles.inputErrorStyle
+                  : null,
+              ]}
+              placeholder="Email"
+              keyboardType="email-address"
+              placeholderTextColor={'#91919F'}
+              autoCapitalize="none"
+              onChangeText={formikProps.handleChange('email')}
+              onBlur={formikProps.handleBlur('email')}
+              value={formikProps.values.email}
+            />
+            {formikProps.errors.email && formikProps.touched.email && (
+              <Text style={styles.errorText}>{formikProps.errors.email}</Text>
+            )}
+            <View style={styles.inputPassword}>
+              <TextInput
+                style={[
+                  styles.input,
+                  formikProps.errors.password && formikProps.touched.password
+                    ? styles.inputErrorStyle
+                    : null,
+                ]}
+                placeholder="Password"
+                placeholderTextColor={'#91919F'}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={formikProps.handleChange('password')}
+                onBlur={formikProps.handleBlur('password')}
+                value={formikProps.values.password}
+              />
+              <View style={styles.eyeIconWrapper}>
+                <Eye />
+              </View>
+            </View>
+            {formikProps.errors.password && formikProps.touched.password && (
+              <Text style={styles.errorText}>
+                {formikProps.errors.password}
+              </Text>
+            )}
+            <View style={styles.checkboxWrapper}>
+              <CheckBox
+                disabled={false}
+                value={toggleCheckBox}
+                onValueChange={newValue => setToggleCheckBox(newValue)}
+                style={styles.checkbox}
+              />
+              <Text style={styles.checkboxText}>
+                By signing up, you agree to the{' '}
+                <Text style={styles.checkboxTextLink}>
+                  Terms of Service and Privacy Policy
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => formikProps.handleSubmit()}>
+                <Text style={styles.buttonText}>Sign Up</Text>
+              </TouchableOpacity>
+              <Text style={styles.p}>Or with</Text>
+              <TouchableOpacity
+                style={styles.googleButton}
+                onPress={() => navigation.navigate('Signup')}>
+                <GoogleIcon />
+                <Text style={styles.googleButtonText}>Sign Up with Google</Text>
+              </TouchableOpacity>
+              <Text style={styles.lastText}>
+                Already have an account?{' '}
+                <Text
+                  style={styles.loginRedirect}
+                  onPress={() => navigation.navigate('Login')}>
+                  Login
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
-        <View style={styles.checkboxWrapper}>
-          <CheckBox
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={newValue => setToggleCheckBox(newValue)}
-            style={styles.checkbox}
-          />
-          <Text style={styles.checkboxText}>
-            By signing up, you agree to the{' '}
-            <Text style={styles.checkboxTextLink}>
-              Terms of Service and Privacy Policy
-            </Text>
-          </Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          <Text style={styles.p}>Or with</Text>
-          <TouchableOpacity
-            style={styles.googleButton}
-            onPress={() => navigation.navigate('Signup')}>
-            <GoogleIcon />
-            <Text style={styles.googleButtonText}>Sign Up with Google</Text>
-          </TouchableOpacity>
-          <Text style={styles.lastText}>
-            Already have an account?{' '}
-            <Text
-              style={styles.loginRedirect}
-              onPress={() => navigation.navigate('Login')}>
-              Login
-            </Text>
-          </Text>
-        </View>
-      </View>
-    </View>
+      )}
+    </Formik>
   );
 };
 
@@ -231,6 +315,15 @@ const styles = StyleSheet.create({
   loginRedirect: {
     color: '#8B50FF',
     textDecorationLine: 'underline',
+  },
+  inputErrorStyle: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: 'red',
+    marginTop: -15,
+    marginBottom: 20,
   },
 });
 

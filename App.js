@@ -5,6 +5,7 @@ import SwiperComponent from './SwiperComponent';
 import Signup from './Signup';
 import Login from './Login';
 import ForgotPassword from './ForgotPassword';
+import Toast from 'react-native-toast-message';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ const App = () => (
         component={ForgotPassword}
       />
     </Stack.Navigator>
+    <Toast />
   </NavigationContainer>
 );
 
