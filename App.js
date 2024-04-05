@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import SwiperComponent from './SwiperComponent';
 import Signup from './Signup';
 import Login from './Login';
+import Dashboard from './Dashboard';
 import ForgotPassword from './ForgotPassword';
 import Toast from 'react-native-toast-message';
 
@@ -21,6 +22,11 @@ const App = () => (
         name="Signup"
         options={{headerShown: false}}
         component={Signup}
+      />
+      <Stack.Screen
+        name="Dashboard"
+        options={{headerShown: false}}
+        component={Dashboard}
       />
       <Stack.Screen
         name="Login"

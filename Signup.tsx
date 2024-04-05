@@ -8,7 +8,7 @@ import CheckBox from '@react-native-community/checkbox';
 import GoogleIcon from './svg/googleIcon';
 import {Formik} from 'formik';
 import {signUpSchema} from './validationSchema';
-import Toast from 'react-native-toast-message';
+import {errorToast, successToast} from './toastUtiles';
 
 interface SignupProps {
   navigation: NavigationProp<ParamListBase>;
@@ -16,21 +16,7 @@ interface SignupProps {
 
 const Signup: React.FC<SignupProps> = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const successToast = (message: string) => {
-    Toast.show({
-      type: 'success',
-      text1: message,
-      text1Style: {fontSize: 16, fontWeight: 'bold', color: '#464A4D'},
-    });
-  };
-
-  const errorToast = (message: string) => {
-    Toast.show({
-      type: 'error',
-      text1: message,
-      text1Style: {fontSize: 16, fontWeight: 'bold', color: '#464A4D'},
-    });
-  };
+  const [togglePassword, setTogglePassword] = React.useState(true);
 
   return (
     <Formik
@@ -39,7 +25,7 @@ const Signup: React.FC<SignupProps> = ({navigation}) => {
       onSubmit={async values => {
         try {
           const response = await fetch(
-            'http://10.1.3.100/expense-tracker/register',
+            'http://10.1.3.88/expense-tracker/register',
             {
               method: 'POST',
               headers: {
@@ -52,6 +38,9 @@ const Signup: React.FC<SignupProps> = ({navigation}) => {
           const responseData = await response.json();
           if (responseData.success) {
             successToast(responseData.message);
+            setTimeout(() => {
+              navigation.navigate('Dashboard');
+            }, 1000);
           } else {
             errorToast(responseData.message);
           }
@@ -116,7 +105,7 @@ const Signup: React.FC<SignupProps> = ({navigation}) => {
                 ]}
                 placeholder="Password"
                 placeholderTextColor={'#91919F'}
-                secureTextEntry={true}
+                secureTextEntry={togglePassword}
                 autoCapitalize="none"
                 autoCorrect={false}
                 onChangeText={formikProps.handleChange('password')}
@@ -124,7 +113,7 @@ const Signup: React.FC<SignupProps> = ({navigation}) => {
                 value={formikProps.values.password}
               />
               <View style={styles.eyeIconWrapper}>
-                <Eye />
+                <Eye onPress={() => setTogglePassword(!togglePassword)} />
               </View>
             </View>
             {formikProps.errors.password && formikProps.touched.password && (

@@ -9,61 +9,124 @@ import {
 } from 'react-native';
 import LeftArrow from './svg/leftArrow';
 import Eye from './svg/eye';
+import {Formik} from 'formik';
+import {loginSchema} from './validationSchema';
+import {errorToast, successToast} from './toastUtiles';
 
 interface LoginProps {
   navigation: NavigationProp<ParamListBase>;
 }
 
 const Login: React.FC<LoginProps> = ({navigation}) => {
+  const [togglePassword, setTogglePassword] = React.useState(true);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <LeftArrow />
-        </TouchableOpacity>
-        <Text style={styles.title}>Login</Text>
-      </View>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          placeholderTextColor={'#91919F'}
-          autoCapitalize="none"
-        />
-        <View style={styles.inputPassword}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor={'#91919F'}
-            secureTextEntry={true}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          <View style={styles.eyeIconWrapper}>
-            <Eye />
+    <Formik
+      initialValues={{email: '', password: ''}}
+      validationSchema={loginSchema}
+      onSubmit={async values => {
+        try {
+          const response = await fetch(
+            'http://10.1.3.88/expense-tracker/login',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(values),
+            },
+          );
+
+          const responseData = await response.json();
+          if (responseData.success) {
+            successToast(responseData.message);
+            setTimeout(() => {
+              navigation.navigate('Dashboard');
+            }, 1000);
+          } else {
+            errorToast(responseData.error);
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+        }
+      }}>
+      {formikProps => (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+              <LeftArrow />
+            </TouchableOpacity>
+            <Text style={styles.title}>Login</Text>
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={[
+                styles.input,
+                formikProps.errors.email && formikProps.touched.email
+                  ? styles.inputErrorStyle
+                  : null,
+              ]}
+              placeholder="Email"
+              keyboardType="email-address"
+              placeholderTextColor={'#91919F'}
+              autoCapitalize="none"
+              onChangeText={formikProps.handleChange('email')}
+              onBlur={formikProps.handleBlur('email')}
+              value={formikProps.values.email}
+            />
+            {formikProps.errors.email && formikProps.touched.email && (
+              <Text style={styles.errorText}>{formikProps.errors.email}</Text>
+            )}
+            <View style={styles.inputPassword}>
+              <TextInput
+                style={[
+                  styles.input,
+                  formikProps.errors.password && formikProps.touched.password
+                    ? styles.inputErrorStyle
+                    : null,
+                ]}
+                placeholder="Password"
+                placeholderTextColor={'#91919F'}
+                secureTextEntry={togglePassword}
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={formikProps.handleChange('password')}
+                onBlur={formikProps.handleBlur('password')}
+                value={formikProps.values.password}
+              />
+              <View style={styles.eyeIconWrapper}>
+                <Eye onPress={() => setTogglePassword(!togglePassword)} />
+              </View>
+            </View>
+            {formikProps.errors.password && formikProps.touched.password && (
+              <Text style={styles.errorText}>
+                {formikProps.errors.password}
+              </Text>
+            )}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => formikProps.handleSubmit()}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={styles.forgotPasswordText}
+              onPress={() => navigation.navigate('ForgotPassword')}>
+              Forgot Password?
+            </Text>
+            <Text style={styles.lastText}>
+              Don't have an account yet?{' '}
+              <Text
+                style={styles.lastSpecialText}
+                onPress={() => navigation.navigate('Signup')}>
+                Sign Up
+              </Text>
+            </Text>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-        </View>
-        <Text
-          style={styles.forgotPasswordText}
-          onPress={() => navigation.navigate('ForgotPassword')}>
-          Forgot Password?
-        </Text>
-        <Text style={styles.lastText}>
-          Don't have an account yet?{' '}
-          <Text
-            style={styles.lastSpecialText}
-            onPress={() => navigation.navigate('Signup')}>
-            Sign Up
-          </Text>
-        </Text>
-      </View>
-    </View>
+      )}
+    </Formik>
   );
 };
 
@@ -158,6 +221,15 @@ const styles = StyleSheet.create({
   lastSpecialText: {
     color: '#8B50FF',
     textDecorationLine: 'underline',
+  },
+  inputErrorStyle: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: 'red',
+    marginTop: -15,
+    marginBottom: 20,
   },
 });
 
