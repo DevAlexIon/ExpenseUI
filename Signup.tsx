@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     marginLeft: 135,
   },
   inputWrapper: {
-    marginTop: 56,
+    marginTop: 75,
     display: 'flex',
     alignItems: 'center',
   },
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
   checkboxWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
   },
   checkbox: {
     marginRight: 10,
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     textAlign: 'left',
     color: '#91919F',
-    paddingVertical: 12,
+    paddingVertical: 20,
   },
   buttonContainer: {
     display: 'flex',
@@ -278,6 +279,7 @@ const styles = StyleSheet.create({
     height: 56,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 15,
   },
   googleButtonText: {
     color: '#212325',

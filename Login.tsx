@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     marginLeft: 135,
   },
   inputWrapper: {
-    marginTop: 56,
+    marginTop: 75,
     display: 'flex',
     alignItems: 'center',
   },
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     top: 14,
   },
   buttonContainer: {
-    paddingTop: 40,
+    paddingTop: 25,
   },
   button: {
     backgroundColor: '#7F3DFF',
