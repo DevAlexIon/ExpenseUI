@@ -1,15 +1,9 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function GoogleIcon(props) {
+function GoogleIcon() {
   return (
-    <Svg
-      width={32}
-      height={32}
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+    <Svg width={32} height={32} viewBox="0 0 32 32" fill="none">
       <Path
         d="M29.074 13.389H28v-.056H16v5.334h7.535C22.436 21.77 19.482 24 16 24a8 8 0 010-16c2.04 0 3.895.77 5.307 2.026l3.772-3.771A13.272 13.272 0 0016 2.667C8.637 2.667 2.667 8.637 2.667 16S8.637 29.333 16 29.333 29.333 23.363 29.333 16c0-.894-.092-1.767-.259-2.611z"
         fill="#FFC107"

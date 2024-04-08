@@ -113,7 +113,10 @@ const Signup: React.FC<SignupProps> = ({navigation}) => {
                 value={formikProps.values.password}
               />
               <View style={styles.eyeIconWrapper}>
-                <Eye onPress={() => setTogglePassword(!togglePassword)} />
+                <TouchableOpacity
+                  onPress={() => setTogglePassword(!togglePassword)}>
+                  <Eye />
+                </TouchableOpacity>
               </View>
             </View>
             {formikProps.errors.password && formikProps.touched.password && (

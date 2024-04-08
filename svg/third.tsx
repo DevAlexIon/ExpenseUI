@@ -9,20 +9,11 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 
-function ThirdSVGComponent(props) {
+function ThirdSVGComponent() {
   return (
-    <Svg
-      width={312}
-      height={312}
-      viewBox="0 0 312 312"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+    <Svg width={312} height={312} viewBox="0 0 312 312" fill="none">
       <Mask
         id="a"
-        style={{
-          maskType: 'alpha',
-        }}
         maskUnits="userSpaceOnUse"
         x={0}
         y={0}

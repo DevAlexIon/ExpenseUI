@@ -11,20 +11,11 @@ import Svg, {
   RadialGradient,
 } from 'react-native-svg';
 
-function SecondSVGComponent(props) {
+function SecondSVGComponent() {
   return (
-    <Svg
-      width={312}
-      height={312}
-      viewBox="0 0 312 312"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+    <Svg width={312} height={312} viewBox="0 0 312 312" fill="none">
       <Mask
         id="a"
-        style={{
-          maskType: 'alpha',
-        }}
         maskUnits="userSpaceOnUse"
         x={0}
         y={0}
@@ -89,11 +80,7 @@ function SecondSVGComponent(props) {
           fill="url(#paint4_linear_1271_5668)"
           fillOpacity={0.46}
         />
-        <G
-          style={{
-            mixBlendMode: 'soft-light',
-          }}
-          filter="url(#filter0_f_1271_5668)">
+        <G filter="url(#filter0_f_1271_5668)">
           <Path
             d="M74 205.821c-3.6 15.6-14.833 24.167-20 26.5-9.833-4.833-48-19-48-19 4.833-4.5 15.4-16.9 19-30.5 4.5-17 15.5-41 33.5-43.5 14.4-2 42.667 5.833 55 10-26.5 20.5-35 37-39.5 56.5z"
             fill="url(#paint5_linear_1271_5668)"
